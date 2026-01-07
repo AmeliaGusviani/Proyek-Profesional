@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riwayat Klasifikasi</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body id="history">
+  <!-- Header & Navbar -->
+  <header>
+    <div class="container header-container">
+      <div class="logo">
+        <img class="logo-icon" src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Logo">
+        <span>Sistem Klasifikasi Penyakit Tanaman Singkong</span>
+      </div>
+      <nav class="nav-menu">
+        <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">HOME</a>
+        <a href="/klasifikasi" class="nav-link {% if request.path == '/klasifikasi' %}active{% endif %}">KLASIFIKASI</a>
+        <a href="/about" class="nav-link {% if request.path == '/about' %}active{% endif %}">ABOUT</a>
+        <a href="/history" class="nav-link {% if request.path == '/history' %}active{% endif %}">RIWAYAT</a>
+        <a href="/logout" class="nav-link">LOGOUT</a>
+        <div class="indicator"></div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="history-section">
+    <div class="container">
+      <h2>Riwayat Klasifikasi Anda</h2>
+
+      {% if histories %}
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Gambar</th>
+            <th>Metode</th>
+            <th>Penyakit</th>
+            <th>Akurasi</th>
+            <th>Presisi</th>
+            <th>Recall</th>
+            <th>F1-Score</th>
+            <th>Waktu</th>
+            <th>Lokasi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for h in histories %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>
+                <img src="/{{ h.image_path.replace('\\', '/') }}" alt="Gambar" width="100">
+            </td>
+            <td>{{ h.method or '-' }}</td>
+            <td>{{ h.result }}</td>
+            <td>{{ h.accuracy }}%</td>
+            <td>{{ h.precision }}%</td>
+            <td>{{ h.recall }}%</td>
+            <td>{{ h.f1_score }}%</td>
+            <td>{{ h.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ h.location or 'Tidak diketahui' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <p class="no-history">
+          Hai, {{ session.get('username') }} 👋<br>
+          Riwayat klasifikasi Anda masih kosong.
+        </p>
+      {% endif %}
+    </div>
+  </section>
+</body>
+</html>

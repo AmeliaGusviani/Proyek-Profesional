@@ -1,0 +1,1203 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  /* Warna navbar */
+  :root {
+    --primary-green: #0f2f26;     
+    --accent-green: #01b173;     
+    --hover-green: #014d3e;     
+    --text: #fefefe;
+    --background-light: #eafff6; 
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-light);
+    color: #014d3e;
+    line-height: 1.6;
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+  
+  /* Header */
+  header {
+    background-color: #1e3b30; 
+    background-image:
+      radial-gradient(at 20% 30%, rgba(1, 177, 115, 0.25) 0px, transparent 60%),
+      radial-gradient(at 80% 70%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(3px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Navbar Link Default */
+  nav a {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  /* Saat Hover: hanya teks yang berubah */
+  nav a:hover {
+    color: var(--accent-green);
+    background-color: transparent;
+  }
+
+  /* Saat Aktif: baru latarnya hijau muda */
+  nav a.active {
+    background-color: var(--accent-green); 
+    border-radius: 8px;
+    font-weight: bold;
+    color: white; 
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #ffffff;
+  }
+
+  .logo-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .hero {
+    animation: fadeInHero 1.5s ease-out both;
+    position: relative;
+    padding: 6.5rem 0;
+
+    background-color: #0f2f26;
+    background-image:
+      radial-gradient(circle at 74% 50%, rgba(1, 177, 115, 0.9) 0px, transparent 240px),
+      radial-gradient(at 30% 20%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+      radial-gradient(at 70% 50%, rgba(1, 177, 115, 0.25) 0px, transparent 55%),
+      radial-gradient(at 50% 80%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+
+    color: white;
+    overflow: visible;
+    min-height: 90vh;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+  }
+  .animated-circle {
+    position: absolute;
+    top: 21%;
+    left: 61%;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    overflow: hidden;
+    filter: blur(80px);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .animated-circle::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(270deg,
+      hsl(150, 100%, 45%),
+      hsl(160, 100%, 50%),
+      hsl(170, 100%, 45%),
+      hsl(150, 100%, 50%));
+
+    background-size: 600% 600%;
+    animation: gradientFlow 10s ease infinite;
+  }
+
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @media (max-width: 768px) {
+    .animated-circle {
+      width: 250px;
+      height: 250px;
+      top: 30%;
+      left: 50%;
+    }
+  }
+
+  .hero-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .hero-text {
+    flex: 1;
+  }
+  
+  .hero-text h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hero-text span {
+    font-weight: bold;
+  }
+  
+  .hero-text small {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+  
+  .hero-text button.hero-mulai {
+    margin-top: 2rem;
+    padding: 1rem 4rem;
+    background-color: #01b173;     
+    color: #ffffff;                
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(1, 177, 115, 0.4);  
+    transition: all 0.3s ease-in-out;
+    font-size: 0.9rem;
+  }
+
+  .hero-text button.hero-mulai:hover {
+    background-color: #019c66;   
+    transform: scale(1.05);
+  }
+
+
+  /*tampilan kotak 4*/ 
+  .hero-image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    flex: 1;
+    max-width: 400px; 
+    margin: auto;
+    z-index: 2;
+  }
+
+  /* Reset semua radius dulu */
+  .disease-card {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    aspect-ratio: 1 / 1; 
+    border-radius: 0;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  .disease-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+  /* Sudut-sudut spesifik tetap dibulatkan */
+  .disease-card:nth-child(1) {
+    border-top-left-radius: 180px;
+  }
+
+  .disease-card:nth-child(2) {
+    border-top-right-radius: 180px;
+  }
+
+  .disease-card:nth-child(3) {
+    border-bottom-left-radius: 180px;
+  }
+
+  .disease-card:nth-child(4) {
+    border-bottom-right-radius: 180px;
+  }
+
+  /* Tambahkan gambar background untuk setiap card */
+  .card1 {
+    background-image: url('../assets/images/train-cbb-26.jpg');
+  }
+
+  .card2 {
+    background-image: url('../assets/images/train-cbsd-136.jpg');
+  }
+
+  .card3 {
+    background-image: url('../assets/images/train-cgm-0.jpg');
+  }
+
+  .card4 {
+    background-image: url('../assets/images/train-cmd-9.jpg');
+  }
+
+
+  /* Penyakit */
+  #penyakit {
+    /* background-color: #1f2a15; */
+    background-color: #f0fffc;
+    background-image:
+      radial-gradient(at 14% 80%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+      radial-gradient(at 30% 20%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+      radial-gradient(at 70% 50%, rgba(1, 177, 115, 0.25) 0px, transparent 55%),
+      radial-gradient(at 50% 80%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+    padding: 8rem 0; 
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-top: -4rem; 
+    margin-bottom: 0.5rem;
+  }
+  
+  .section-subtitle {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  
+  .card-horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 1.5rem;
+    scroll-snap-type: x mandatory;
+    padding: 1rem 0;
+    scroll-behavior: smooth;
+    scrollbar-width: thin; 
+    -ms-overflow-style: none; 
+  }
+
+  .card-horizontal-scroll::-webkit-scrollbar {
+    display: none; 
+  }
+
+  .disease-card-horizontal {
+    flex: 0 0 auto;
+    width: 555px;
+    background-color: #0f2f26;
+    background-image:
+      radial-gradient(circle at 14% 50%, rgba(1, 177, 115, 0.9) 0px, transparent 180px),
+      radial-gradient(at 30% 20%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+      radial-gradient(at 70% 50%, rgba(1, 177, 115, 0.25) 0px, transparent 55%),
+      radial-gradient(at 50% 80%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+
+    color: #ffffff;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    scroll-snap-align: start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .disease-card-horizontal:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .card-img-horizontal {
+    width: 750px;
+    height: 200px;
+    background: #ccc;
+    border-radius: 8px;
+  }
+  
+  .card-text h4 {
+    margin-bottom: 0.5rem;
+  }
+
+/*Klasifikasi*/
+  #klasifikasi {
+    background-color: #0f2f26;
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(1, 177, 115, 0.9) 0px, transparent 800px),
+      radial-gradient(at 30% 20%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+      radial-gradient(at 70% 50%, rgba(1, 177, 115, 0.25) 0px, transparent 55%),
+      radial-gradient(at 50% 80%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+  }
+
+  .klasifikasi-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* kiri+tengah jadi 1, kanan tetap */
+    gap: 1rem;
+    margin-top: -0.7rem;
+  }
+  /* === Layout Kamera + Tombol Samping === */
+  .input-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Kamera di kiri */
+  .kamera-box {
+    background: rgba(200, 200, 200, 0.3);
+    border-radius: 12px;
+    padding: 0.2rem;   /* semula 0.5rem → lebih tipis */
+    text-align: center;
+    width: 360px;      /* semula 355px → lebih pas sama kamera */
+    margin-left: -130px;
+  }
+
+
+  #camera {
+    aspect-ratio: 1 / 1;
+    width: 360px ;      /* dari 260px → jadi 320px */
+    max-width: 100%;        /* jangan 120%, karena tetap akan dibatasi parent */
+    border-radius: 12px;
+    object-fit: cover;
+    background: #000;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* Kontrol di kanan */
+  .kontrol-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+    background: rgba(200, 200, 200, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    width: 320px;
+    margin-right: -120px; 
+  }
+
+  .tombol-kamera {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .input-metode select {
+    width: 100%;
+    padding: 0.4rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  .tombol-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .hero-text button,
+  .btn-utama {
+    margin-top: 2rem; /*spasi 2 tombol klasifikasi coba*/
+    padding: 1rem 4rem;
+    background-color: #014d3e;;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    color: #fff;
+    font-size: 0.9rem;
+  }
+  
+  .hero-text button:hover,
+  .btn-utama:hover {
+    background-color: #029b62;
+    color: white;
+    border: none;
+    transform: scale(1.05);
+  }
+
+  .tombol-wrapper {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .btn-coba-lagi {
+    background-color: #027866; 
+    color: white;
+    font-size: 0.9rem;
+  }
+  
+  .btn-coba-lagi:hover {
+    background-color: #029b62;
+    color: white;
+    border: none;
+  }
+  .input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  #take-photo,
+  .btn-upload {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;     /* sama besar */
+    background: #3b8c5a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease-in-out;
+    display: flex;              /* pastikan isi di tengah */
+    align-items: center;
+    justify-content: center;
+    height: 40px;               /* tinggi seragam */
+    width: 150px;
+    box-sizing: border-box;
+  }
+  .btn-upload {
+    margin: 0;                /* hapus margin bawaan */
+    padding: 0.6rem 1.2rem;   /* pastikan sama */
+  }
+  #take-photo:hover,
+  .btn-upload:hover {
+    background: #4caf70;
+    transform: scale(1.05);
+  }
+
+
+  .kolom {
+    background-color: #ffffff;     
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: #014d3e;
+  }
+
+  /* khusus gambar asli & preprocessing */
+  .proses-grid {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: -1rem;
+  }
+
+  .proses-grid .gambar-preview {
+    width: 360px;
+    height: 150px;
+    margin: 0 auto;
+  }
+
+  /* khusus hasil klasifikasi */
+  .gambar-hasil {
+    width: 30px;
+    height: 210px;
+    border-radius: 10px;
+    background: #ddd;
+  }
+
+  .gambar-preview {
+    width: 240px;
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #ddd;
+    margin-left: -0.8rem;
+    margin-right: -0.8rem;
+    margin-top: -0.5rem;
+    margin-left: -0.8rem;
+  }
+  
+  .gambar-wrapper {
+    margin-bottom: 0.8rem;
+  }
+  
+  .gambar-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .upload-box {
+    background: rgba(200, 200, 200, 0.5); /* blur */
+    backdrop-filter: blur(5px);
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  .kolom.kanan {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: justify;
+
+    height: 630px; 
+    overflow-y: auto; 
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  .blur-placeholder p {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #014d3e;
+  }
+
+  .hasil-klasifikasi {
+    margin-top: -3rem; 
+  }
+  
+  .card-hasil {
+    background: #fff;
+    color: #014d3e;
+    padding: 1rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    align-items: flex-start; 
+  }
+  /* khusus gambar hasil biar tidak ikut styling gambar-preview */
+  .hasil-gambar-wrapper {
+    margin: 0;
+  }
+  .gambar-hasil {
+    background: #ddd;
+    height: 210px;
+    width: 200px;
+    border-radius: 10px;
+    margin-bottom: -0.8rem;
+  }
+  
+  .hasil-detail {
+    flex: 1;
+  }
+  .hasil-detail-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  /* .hasil-detail-content p {
+    margin-bottom: 0.8rem;
+  } */
+  .hasil-teks {
+    max-width: 50%;
+  }
+
+  .judul-klasifikasi {
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .penyakit-nama {
+    font-size: 1rem;
+  }
+  
+  .progress-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: flex-end;
+  }
+  
+  .progress-item {
+    text-align: center;
+    width: 100px;
+    position: relative;
+    margin-top: 50px;  
+    margin-right: 30px;
+  }
+  
+  .progress-ring {
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .progress-ring__background {
+    fill: none;
+    stroke: #eee;
+    stroke-width: 10;
+  }
+  
+  .progress-ring__circle {
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1s ease;
+  }
+
+  .progress-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  /* Responsif tambahan */
+  @media (max-width: 600px) {
+    .progress-grid {
+      justify-content: center;
+    }
+  
+    .progress-item {
+      width: 100px;
+    }
+  }
+  
+  .tabel-hasil {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    text-align: center;
+  }
+  
+  .icon-button {
+    background-color: #027866;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-size: 1rem;
+    margin-top: 109px; 
+    display: block;  
+  }
+
+  .icon-button:hover {
+    background-color: #029b62;
+    transform: scale(1.05);
+  }
+
+  
+/*Tips*/
+  #tips{
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(1, 177, 115, 0.9) 0px, transparent 500px),
+      radial-gradient(at 30% 20%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+      radial-gradient(at 70% 50%, rgba(1, 177, 115, 0.25) 0px, transparent 55%),
+      radial-gradient(at 50% 80%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+
+  }
+  .tips {
+    background: #fafafa;
+    padding: 6.5rem 0; 
+  }
+
+  .tips-upload h2 {
+    text-align: center;
+    color: #014d3e;
+    margin-top: 20px;
+  }  
+
+  .tips-upload {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+  
+  .tips-grid {
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 2rem;
+    margin-top: -2rem;
+  }
+
+  .tips-box {
+    display: flex;
+    align-items: center;
+    background-color: #0f2f26;
+    background-image:
+      radial-gradient(circle at 9% 50%, rgba(1, 177, 115, 0.9) 0px, transparent 180px),
+      radial-gradient(at 30% 20%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+      radial-gradient(at 70% 50%, rgba(1, 177, 115, 0.25) 0px, transparent 55%),
+      radial-gradient(at 50% 80%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    gap: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 
+      opacity 0.6s ease,
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    cursor: pointer;
+    color: #fff;
+  }
+  
+  .tips-box.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .tips-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    background-color: #165544; 
+    background-image:
+      radial-gradient(circle at 9% 50%, rgba(1, 200, 130, 1) 0px, transparent 180px),
+      radial-gradient(at 30% 20%, rgba(1, 200, 130, 0.4) 0px, transparent 50%),
+      radial-gradient(at 70% 50%, rgba(1, 200, 130, 0.35) 0px, transparent 55%),
+      radial-gradient(at 50% 80%, rgba(1, 200, 130, 0.3) 0px, transparent 50%);
+  }  
+  
+  .tips-gambar {
+    background: #ddd;
+    width: 120px;   
+    height: 180px; 
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .tips-text p {
+    margin: 0;
+    font-size: 1rem;
+    color: #ffffff;
+  }
+
+  .tips-text .penyakit-nama {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  /*About*/
+  #about{
+    background-color: #0f2f26;
+    background-image:
+      radial-gradient(circle at 20% 90%, rgba(1, 177, 115, 0.9) 0px, transparent 600px),
+      radial-gradient(at 30% 20%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+      radial-gradient(at 70% 50%, rgba(1, 177, 115, 0.25) 0px, transparent 55%),
+      radial-gradient(at 50% 80%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+
+  }
+  .about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .about-section {
+    padding: 20px 20px;
+    background: #f9f9f9;
+    text-align: center;
+  }
+
+  .about-section h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #ffffff;
+  }
+
+  .about-desc {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    font-size: 16px;
+    color: #ffffff;
+  }
+
+  .about-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .step-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+
+  .step-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .step-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /*Login*/
+/* ======================
+   LOGIN PAGE STYLE
+   ====================== */
+
+/* Latar belakang seperti About */
+  #login {
+      background-color: #0f2f26;
+      background-image:
+        radial-gradient(circle at 20% 90%, rgba(1, 177, 115, 0.9) 0px, transparent 600px),
+        radial-gradient(at 30% 20%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+        radial-gradient(at 70% 50%, rgba(1, 177, 115, 0.25) 0px, transparent 55%),
+        radial-gradient(at 50% 80%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+      min-height: 90vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  /* Container dan Card */
+  .login-container {
+      max-width: 400px;
+      width: 90%;
+  }
+
+  .login-card {
+      background: #ffffff;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      text-align: center;
+      color: #0f2f26;
+  }
+
+  .login-card h2 {
+      color: #01b173;
+      margin-bottom: 25px;
+  }
+
+  /* Form */
+  label {
+      display: block;
+      text-align: left;
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: #0f2f26;
+  }
+
+  input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.3s;
+  }
+
+  input:focus {
+      border-color: #01b173;
+      outline: none;
+      box-shadow: 0 0 5px rgba(1,177,115,0.3);
+  }
+
+  .btn-login {
+      background-color: #01b173;
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+  }
+
+  .btn-login:hover {
+      background-color: #018c60;
+  }
+
+  /* Pesan Flash */
+  .flash-messages {
+      background: #ffe3e3;
+      color: #a10000;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+  }
+
+  /* Register link */
+  /* Link ke Login */
+  .register-text {
+      margin-top: 15px;
+      font-size: 14px;
+  }
+
+  .register-text a {
+      color: #01b173;
+      text-decoration: none;
+      font-weight: 600;
+  }
+
+  .register-text a:hover {
+      text-decoration: underline;
+  }
+
+/* ======================
+   REGISTER PAGE STYLE
+   ====================== */
+
+  /* Latar belakang sama seperti halaman login */
+  #register {
+      background-color: #0f2f26;
+      background-image:
+        radial-gradient(circle at 20% 90%, rgba(1, 177, 115, 0.9) 0px, transparent 600px),
+        radial-gradient(at 30% 20%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+        radial-gradient(at 70% 50%, rgba(1, 177, 115, 0.25) 0px, transparent 55%),
+        radial-gradient(at 50% 80%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+      min-height: 90vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  /* Container dan Card */
+  .register-container {
+      max-width: 420px;
+      width: 90%;
+  }
+
+  .register-card {
+      background: #ffffff;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      text-align: center;
+      color: #0f2f26;
+  }
+
+  .register-card h2 {
+      color: #01b173;
+      margin-bottom: 25px;
+  }
+
+  /* Form Style */
+  label {
+      display: block;
+      text-align: left;
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: #0f2f26;
+  }
+
+  input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.3s;
+  }
+
+  input:focus {
+      border-color: #01b173;
+      outline: none;
+      box-shadow: 0 0 5px rgba(1,177,115,0.3);
+  }
+
+  /* Tombol */
+  .btn-register {
+      background-color: #01b173;
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+  }
+
+  .btn-register:hover {
+      background-color: #018c60;
+  }
+
+  /* Pesan Flash */
+  .flash-messages {
+      background: #ffe3e3;
+      color: #a10000;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+  }
+
+  /* Link ke Login */
+  .login-text {
+      margin-top: 15px;
+      font-size: 14px;
+  }
+
+  .login-text a {
+      color: #01b173;
+      text-decoration: none;
+      font-weight: 600;
+  }
+
+  .login-text a:hover {
+      text-decoration: underline;
+  }
+
+  /* =========================
+   Halaman Riwayat
+  ========================= */
+  #history {
+    background-color: #0f2f26;
+    background-image:
+      radial-gradient(circle at 20% 90%, rgba(1, 177, 115, 0.9) 0px, transparent 600px),
+      radial-gradient(at 30% 20%, rgba(1, 177, 115, 0.3) 0px, transparent 50%),
+      radial-gradient(at 70% 50%, rgba(1, 177, 115, 0.25) 0px, transparent 55%),
+      radial-gradient(at 50% 80%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+  }
+
+  .history-section {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .history-section h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #fff;
+  }
+
+  .history-table {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    color: #333;
+  }
+
+  .history-table th, .history-table td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .history-table th {
+    background-color: #01b173;
+    color: white;
+  }
+
+  .history-table tr:hover {
+    background-color: #f5f5f5;
+  }
+
+  .no-history {
+    color: #fff;
+    font-size: 18px;
+    margin-top: 20px;
+  }
+
+/*Footer*/
+  .main-footer {
+    background-color: #1e3b30; 
+    background-image:
+      radial-gradient(at 20% 30%, rgba(1, 177, 115, 0.25) 0px, transparent 60%),
+      radial-gradient(at 80% 70%, rgba(1, 177, 115, 0.2) 0px, transparent 50%);
+    color: white;
+    padding: 1rem 0;
+    border-top: 1px solid #555;
+    font-size: 0.85rem;
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; 
+    gap: 1rem;
+  }
+
+  /* Logo + nama kiri */
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Tengah: ikon sosial media */
+  .footer-center {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .footer-center .social-icon {
+    width: 32px;
+    height: 32px;
+    background: #01b173;
+    border-radius: 50%;
+    transition: background 0.3s;
+  }
+
+  .footer-center .social-icon:hover {
+    background: #01b173;
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Kanan: copyright kecil */
+  .footer-right small {
+    color: #ccc;
+  }

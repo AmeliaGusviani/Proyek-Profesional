@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Klasifikasi Penyakit Tanaman Singkong</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+
+</head>
+
+<body>
+    <!--header-->
+    <header>
+        <div class="container header-container">
+        <div class="logo">
+            <img class="logo-icon" src="static/assets/images/logo.png" alt="Logo Daun Singkong" />
+            <span>Sistem Klasifikasi Penyakit Tanaman Singkong</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">HOME</a>
+            <a href="/klasifikasi" class="nav-link {% if request.path == '/klasifikasi' %}active{% endif %}">KLASIFIKASI</a>
+            <a href="/about" class="nav-link {% if request.path == '/about' %}active{% endif %}">ABOUT</a>
+
+            {% if session.get('user_id') %}
+                <a href="/history" class="nav-link {% if request.path == '/history' %}active{% endif %}">RIWAYAT</a>
+                <a href="/logout" class="nav-link">LOGOUT</a>
+            {% else %}
+                <a href="/login" class="nav-link">LOGIN / REGISTER</a>
+            {% endif %}
+
+            <div class="indicator"></div>
+        </nav>
+        </div>
+    </header>
+
+    <!-- Section Klasifikasi -->
+    <section id="klasifikasi">
+        <div class="container">
+            <div class="klasifikasi-grid">
+
+                <!-- Kolom Gabungan -->
+                <div class="kolom gabungan">
+                    <h3>Input Gambar</h3>
+
+                    <div class="input-row">
+                    <!-- Kamera di kiri -->
+                        <div class="kamera-box">
+                            <video id="camera" autoplay playsinline></video>
+                            <canvas id="snapshot" style="display:none;"></canvas>
+                        </div>
+
+                        <!-- Kontrol di kanan -->
+                        <div class="kontrol-box">
+                            <div class="tombol-kamera">
+                                <button id="take-photo">Ambil Foto</button>
+                                <label for="file-input" class="btn-upload">Pilih Gambar</label>
+                                <input type="file" id="file-input" accept="image/*" capture="environment" style="display:none;">
+                            </div>
+
+                            <div class="input-metode">
+                                <label for="method-select">Pilih Metode:</label>
+                                <select id="method-select">
+                                    <option value="svm">SVM</option>
+                                    <option value="cnn">CNN</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Hidden input lokasi -->
+                            <input type="hidden" id="latitude" name="latitude">
+                            <input type="hidden" id="longitude" name="longitude">
+
+                            <div class="tombol-wrapper">
+                                <button type="button" id="btn-klasifikasi" class="btn-utama btn-klasifikasi">Klasifikasi</button>
+                                <button type="button" class="btn-utama btn-coba-lagi" onclick="window.location.href='/klasifikasi';">Coba Lagi</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gambar Asli & Preprocessing (tetap sama) -->
+                    <div class="proses-grid">
+                        <div class="gambar-wrapper">
+                            <p class="gambar-label">Gambar Asli</p>
+                            <div class="gambar-preview" id="original-img"></div>
+                        </div>
+                        <div class="gambar-wrapper">
+                            <p class="gambar-label">Preprocessing</p>
+                            <div class="gambar-preview" id="preprocessed-img"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan -->
+                <div class="kolom kanan">
+                    <h3>Informasi</h3>
+                    <p id="info-penyakit" style="white-space: pre-line;">Silahkan unggah gambar untuk melihat informasi.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hasil Klasifikasi -->
+        <div class="container">
+            <div class="hasil-klasifikasi">
+                <div class="card-hasil">
+                    <!-- Gambar di kiri -->
+                    <div class="gambar-wrapper hasil-gambar-wrapper">
+                        <div class="gambar-hasil"></div>
+                    </div>
+                    <!-- Informasi klasifikasi -->
+                    <div class="hasil-detail">
+                        <!-- Bagi dua sisi horizontal -->
+                        <div class="hasil-detail-content">
+                            <!-- Kiri: Judul dan Nama Penyakit -->
+                            <div class="hasil-teks">
+                                <h3 class="judul-klasifikasi">Hasil Klasifikasi</h3>
+                                <p class="penyakit-nama">Belum Ada Gambar yang diunggah.</p>
+                                <!-- Tambahkan ini -->
+                                <p class="metode" style="display:none;">-</p>
+                                <!-- Tombol simpan -->
+                                <div class="btn-area">
+                                    <button id="saveBtn" class="icon-button" title="Simpan Hasil">
+                                        <i class="fas fa-floppy-disk"></i>
+                                    </button>
+                                </div>                             
+                                </div>
+
+                            <!--Progress ring akurasi-->
+                            <div class="progress-grid">
+                                <!-- Akurasi -->
+                                <div class="progress-item">
+                                    <div class="progress-wrapper">
+                                      <svg class="progress-ring" width="100" height="100">
+                                        <circle class="progress-ring__background" cx="50" cy="50" r="45" />
+                                        <circle id="circle-accuracy" class="progress-ring__circle" cx="50" cy="50" r="45" />
+                                      </svg>
+                                      <div id="text-accuracy" class="progress-text">0%</div>
+                                    </div>
+                                    <p>Akurasi</p>
+                                </div>
+                                <!-- Presisi -->
+                                <div class="progress-item">
+                                <div class="progress-wrapper">
+                                    <svg class="progress-ring" width="100" height="100">
+                                    <circle class="progress-ring__background" cx="50" cy="50" r="45" />
+                                    <circle id="circle-precision" class="progress-ring__circle" cx="50" cy="50" r="45" />
+                                    </svg>
+                                    <div id="text-precision" class="progress-text">0%</div>
+                                </div>
+                                <p>Presisi</p>
+                                </div>
+                                <!-- Recall -->
+                                <div class="progress-item">
+                                <div class="progress-wrapper">
+                                    <svg class="progress-ring" width="100" height="100">
+                                    <circle class="progress-ring__background" cx="50" cy="50" r="45" />
+                                    <circle id="circle-recall" class="progress-ring__circle" cx="50" cy="50" r="45" />
+                                    </svg>
+                                    <div id="text-recall" class="progress-text">0%</div>
+                                </div>
+                                <p>Recall</p>
+                                </div>
+                                <!-- F1 Score -->
+                                <div class="progress-item">
+                                <div class="progress-wrapper">
+                                    <svg class="progress-ring" width="100" height="100">
+                                    <circle class="progress-ring__background" cx="50" cy="50" r="45" />
+                                    <circle id="circle-f1" class="progress-ring__circle" cx="50" cy="50" r="45" />
+                                    </svg>
+                                    <div id="text-f1" class="progress-text">0%</div>
+                                </div>
+                                <p>F1 Score</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Tips-->
+    <section id="tips">
+        <div class="tips-upload">
+            <h2>Tips Upload Gambar yang Tepat</h2>
+            <p class="section-subtitle">Berikut beberapa tips dalam mengunggah foto daun singkong yang baik:</p>
+            <div class="tips-grid">
+                <!--Tips 1-->
+                <div class="tips-box show">
+                    <div class="tips-image">
+                        <div class="tips-gambar">
+                            <img src="static/assets/images/train-cgm-0.jpg" alt="Ambil Gambar Daun Secara Jelas" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                        </div>
+                    </div>
+                    <div class="tips-text">
+                        <h4 class="tips-nama">Ambil Gambar Daun Secara Jelas</h4>
+                        <p>
+                            Untuk memastikan hasil klasifikasi yang akurat, gambar daun harus diambil dengan kualitas yang baik. Daun yang akan difoto sebaiknya dalam kondisi utuh, tidak sobek, dan tidak terlipat.
+                        </p>
+                        <strong>Saran Pengambilan Gambar:</strong>
+                        <ul>
+                            <li>Pegang daun sejajar dengan kamera. Usahakan posisi kamera tegak lurus terhadap permukaan daun.</li>
+                            <li>Stabilkan tangan atau gunakan penyangga jika memungkinkan untuk menghindari gambar blur akibat goyangan.</li>
+                            <li>Ambil beberapa gambar dari daun yang sama dan pilih yang paling jelas dan fokus untuk diunggah ke sistem.</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <!--Tips 2-->                
+                <div class="tips-box show">
+                    <div class="tips-image">
+                        <div class="tips-gambar">
+                            <img src="static/assets/images/train-cmd-9.jpg" alt="Ambil Gambar Daun Secara Jelas" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                        </div>
+                    </div>
+                    <div class="tips-text">
+                        <h4 class="tips-nama">Gunakan Pencahayaan Alami dan Hindari Bayangan</h4>
+                        <p>
+                            Pencahayaan memainkan peran penting dalam keberhasilan proses klasifikasi citra daun. Sistem ini sangat bergantung pada kualitas gambar, terutama dalam membaca warna alami, pola tekstur, dan bentuk dari daun.
+                        </p>
+                        <strong>Saran Pengambilan Gambar:</strong>
+                        <ul>
+                            <li>Ambil gambar di luar ruangan saat pagi atau sore untuk mendapatkan cahaya yang lembut dan merata.</li>
+                            <li>Hindari pencahayaan buatan yang menghasilkan bias warna seperti lampu kuning atau neon berwarna biru.</li>
+                            <li>Perhatikan posisi tubuh dan tangan agar tidak menghasilkan bayangan yang menutupi permukaan daun.</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <!--Tips 3-->
+                <div class="tips-box show">
+                    <div class="tips-image">
+                        <div class="tips-gambar">
+                            <img src="static/assets/images/train-cbsd-495.jpg" alt="Ambil Gambar Daun Secara Jelas" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                        </div>
+                    </div>
+                    <div class="tips-text">
+                        <h4 class="tips-nama">Gunakan Latar Belakang yang Sederhana atau Kontras</h4>
+                        <p>
+                            Latar belakang yang bersih dan kontras sangat penting dalam proses klasifikasi. Jika latar belakang terlalu ramai, maka sistem dapat kesulitan membedakan mana yang merupakan objek utama dan mana yang bukan.
+                        </p>
+                        <strong>Saran Pengambilan Gambar:</strong>
+                        <ul>
+                            <li>Hindari memotret daun di atas rumput, tanah, batu, atau latar dengan corak atau warna mirip hijau/coklat.</li>
+                            <li>Pastikan tidak ada benda lain (seperti tangan, peralatan, atau bayangan) yang ikut masuk ke dalam area sekitar daun.</li>
+                            <li>Ambil gambar dari atas secara tegak lurus agar sistem lebih mudah membedakan objek utama.</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <!--Tips 4-->
+                <div class="tips-box show">
+                    <div class="tips-image">
+                        <div class="tips-gambar">
+                            <img src="static/assets/images/train-cbsd-1035.jpg" alt="Ambil Gambar Daun Secara Jelas" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                        </div>
+                    </div>
+                    <div class="tips-text">
+                        <h4 class="tips-nama">Fokus pada Satu Daun Utama dalam Satu Gambar</h4>
+                        <p>
+                            Dalam sistem klasifikasi berbasis citra, kejelasan objek utama sangat krusial. Jika dalam satu foto terdapat banyak daun atau bagian tanaman lain, maka sistem bisa kesulitan menentukan daun mana yang menjadi fokus analisis.
+                        </p>
+                        <strong>Saran Pengambilan Gambar:</strong>
+                        <ul>
+                            <li>Ambil gambar dari dekat hanya pada satu helai daun yang terlihat paling utuh dan jelas.</li>
+                            <li>Jika tanaman memiliki banyak daun, pilih daun yang permukaannya paling bersih dan tidak tertutup daun lain.</li>
+                            <li>Perhatikan agar daun berada di tengah frame dan terfokus dengan baik, tidak buram atau terpotong sebagian.</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+        <div class="footer-container">
+            
+            <!-- Kiri: Logo + Nama -->
+            <div class="footer-left">
+                <img class="logo-icon" src="static/assets/images/logo.png" alt="Logo Daun Singkong" />
+                <span>Sistem Klasifikasi Penyakit Tanaman Singkong</span>
+            </div>
+
+            <!-- Kanan: Copyright -->
+            <div class="footer-right">
+                <small>&copy; 2025 Sistem Klasifikasi Penyakit Tanaman Singkong. All rights reserved.</small>
+            </div>
+
+        </div>
+    </footer>
+
+    <!--JS Klasifikasi-->
+    <script>
+        let uploadedFile = null;
+        let extractedFeatures = null;
+
+        function setRingProgress(circleId, textId, percent) {
+            console.log(`Setting progress for ${circleId} with ${percent}%`); // Debugging
+    
+            const ring = document.getElementById(circleId);
+            const text = document.getElementById(textId);
+            const radius = 45;
+            const circumference = 2 * Math.PI * radius;
+
+            if (!ring || !text) {
+                console.warn(`Element not found: ${circleId} or ${textId}`);
+                return;
+            }
+            // Pastikan properti awal hanya diatur sekali (tidak ditimpa setiap kali)
+            if (!ring.dataset.initialized) {
+                ring.style.strokeDasharray = `${circumference}`;
+                ring.style.strokeDashoffset = circumference; // Tambahan penting
+                ring.dataset.initialized = "true";
+            }
+
+            // Ubah warna sesuai nilai
+            if (percent < 60) ring.style.stroke = '#e74c3c';
+            else if (percent < 80) ring.style.stroke = '#f1c40f';
+            else ring.style.stroke = '#2ecc71';
+
+            // Update the ring animation
+            let current = 0;
+            const target = percent;
+            const stepTime = 10; // ms
+            const increment = (target - current) / 60; // 60 frame kira2 600ms
+
+            const animate = () => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                }
+
+                const offset = circumference - (current / 100) * circumference;
+                ring.style.strokeDashoffset = offset;
+                text.textContent = `${current.toFixed(1)}%`;
+
+                if (current < target) {
+                    requestAnimationFrame(animate);
+                }
+            };
+
+            animate();
+
+        }
+
+        // ================== Upload Gambar (kamera / file) ==================
+        document.getElementById('file-input').addEventListener('change', (e) => {
+            uploadedFile = e.target.files[0];
+
+            const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+            if (!allowedTypes.includes(uploadedFile.type)) {
+                alert("Format file tidak didukung. Harap unggah gambar PNG, JPG, atau JPEG.");
+                return;
+            }
+
+            const objectURL = URL.createObjectURL(uploadedFile);
+            document.querySelectorAll('.gambar-preview')[0].style.backgroundImage = `url(${objectURL})`;
+            document.querySelectorAll('.gambar-preview')[0].style.backgroundSize = "cover";
+            document.querySelectorAll('.gambar-preview')[0].style.backgroundPosition = "center";
+        });
+        // ================== Kamera ==================
+        const video = document.getElementById('camera');
+        const canvas = document.getElementById('snapshot');
+        const ctx = canvas.getContext('2d');
+
+        if (video) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => { video.srcObject = stream; })
+                .catch(err => console.error("Tidak bisa akses kamera:", err));
+        }
+
+        document.getElementById('take-photo')?.addEventListener('click', () => {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob((blob) => {
+                uploadedFile = new File([blob], "camera_capture.png", { type: "image/png" });
+                const objectURL = URL.createObjectURL(uploadedFile);
+
+                document.querySelectorAll('.gambar-preview')[0].style.backgroundImage = `url(${objectURL})`;
+                document.querySelectorAll('.gambar-preview')[0].style.backgroundSize = "cover";
+                document.querySelectorAll('.gambar-preview')[0].style.backgroundPosition = "center";
+            }, "image/png");
+        });
+
+        // ================== Klasifikasi ==================
+        document.getElementById('btn-klasifikasi').addEventListener('click', () => {
+            if (!uploadedFile) {
+                alert("Silakan unggah gambar atau ambil foto terlebih dahulu.");
+                return;
+            }
+
+            const method = document.getElementById('method-select').value;  // ambil metode
+            // Ambil lokasi pengguna (asynchronous)
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    kirimDataKlasifikasi(method, latitude, longitude);
+                },
+                (error) => {
+                    console.warn("Gagal ambil lokasi:", error);
+                    kirimDataKlasifikasi(method, null, null);
+                }
+            );
+        });
+        // Fungsi kirim data + klasifikasi ke backend
+        function kirimDataKlasifikasi(method, latitude, longitude) {
+            const formData = new FormData();
+            formData.append('file', uploadedFile);
+            formData.append('method', method);
+            formData.append('latitude', latitude || '');
+            formData.append('longitude', longitude || '');
+
+
+            fetch('/klasifikasi', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                // Preview preprocessing
+                document.querySelectorAll('.gambar-preview')[1].style.backgroundImage = `url(${data.preprocessed_url})`;
+                document.querySelectorAll('.gambar-preview')[1].style.backgroundSize = "cover";
+                document.querySelectorAll('.gambar-preview')[1].style.backgroundPosition = "center";
+
+                // Gambar hasil di card
+                document.querySelector('.gambar-hasil').style.backgroundImage = `url(${data.image_url})`;
+                document.querySelector('.gambar-hasil').style.backgroundSize = "cover";
+                document.querySelector('.gambar-hasil').style.backgroundPosition = "center";
+
+                // Info penyakit
+                document.querySelector('.penyakit-nama').textContent = data.prediction.toUpperCase();
+                document.getElementById('info-penyakit').textContent = data.info || 'Informasi tidak tersedia';
+
+                // **Tambahkan ini**
+                // document.querySelector('.metode').textContent = method.toUpperCase();  // "SVM" atau "CNN"
+
+                function safeNumber(value) {
+                    const number = Number(value);
+                    return (!isFinite(number) || number < 0) ? 0 : number;
+                }
+
+                setRingProgress('circle-accuracy', 'text-accuracy', safeNumber(data.accuracy));
+                setRingProgress('circle-precision', 'text-precision', safeNumber(data.precision));
+                setRingProgress('circle-recall', 'text-recall', safeNumber(data.recall));
+                setRingProgress('circle-f1', 'text-f1', safeNumber(data.f1_score));
+
+                extractedFeatures = data.features;
+            })
+            .catch(error => {
+                console.error("Error during classification:", error);
+            });
+        };
+
+        // JS Simpan
+        document.getElementById("saveBtn").addEventListener("click", () => {
+            const prediction = document.querySelector('.penyakit-nama').textContent;
+            const infoPenyakit = document.getElementById('info-penyakit').textContent;
+            const accuracy = document.querySelectorAll('.progress-text')[0].textContent;
+            const precision = document.querySelectorAll('.progress-text')[1].textContent;
+            const recall = document.querySelectorAll('.progress-text')[2].textContent;
+            const f1_score = document.querySelectorAll('.progress-text')[3].textContent;
+            const method = document.getElementById('method-select').value.toUpperCase(); // ambil langsung dari select
+            const imgURL = document.querySelector('.gambar-preview').style.backgroundImage.slice(5, -2);
+            const class_map = {
+                'CBB': 'Cassava Bacterial Blight',
+                'CBSD': 'Cassava Brown Streak Disease',
+                'CGM': 'Cassava Green Mite',
+                'CMD': 'Cassava Mosaic Disease',
+                'HEALTHY': 'Daun Singkong Sehat'
+            };
+
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+
+            img.src = imgURL;
+
+            img.onload = () => generatePDF();
+            img.onerror = () => alert("Gagal memuat gambar hasil klasifikasi.");
+
+            function generatePDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(18);
+                doc.text("Hasil Klasifikasi Daun Singkong", 105, 30, null, null, "center");
+
+                doc.addImage(img, "JPEG", 55, 40, 100, 100);
+
+                let y = 150;
+                const namaSingkat = prediction.toUpperCase(); 
+                const namaPanjang = class_map[namaSingkat] || "-";
+
+                doc.setFontSize(14);
+                doc.setFont(undefined, "bold");
+                doc.text(`Hasil Klasifikasi: ${namaSingkat}`, 20, y); y += 8;
+                doc.setFont(undefined, "normal");
+                doc.text(`(${namaPanjang})`, 20, y); y += 12;
+
+                // Metode
+                doc.setFont(undefined, "bold");
+                doc.text(`Metode: ${method}`, 20, y);
+                y += 12; // jangan lupa tambahkan y agar jarak tidak tumpuk
+
+                doc.setFontSize(13);
+                doc.setFont(undefined, "bold");
+                doc.text("Akurasi Klasifikasi:", 20, y); y += 8;
+                doc.setFontSize(12);
+                doc.setFont(undefined, "normal");
+                doc.text(`Akurasi: ${accuracy}`, 20, y); y += 7;
+                doc.text(`Presisi: ${precision}`, 20, y); y += 7;
+                doc.text(`Recall: ${recall}`, 20, y); y += 7;
+                doc.text(`F1 Score: ${f1_score}`, 20, y); y += 10;
+
+                // Info penyakit (split otomatis, pindah halaman jika perlu)
+                doc.setFontSize(11);
+                doc.setFont(undefined, "normal");
+                const splitInfo = infoPenyakit.split(/[.。]\s*/).filter(p => p.trim() !== "");
+                splitInfo.forEach(par => {
+                    const lines = doc.splitTextToSize(par + ".", 170);
+                    lines.forEach(line => {
+                        if (y > 280) { // batas bawah halaman A4
+                            doc.addPage();
+                            y = 20;
+                        }
+                        doc.text(line, 20, y);
+                        y += 6;
+                    });
+                });
+
+
+                doc.save(`hasil_${prediction}.pdf`);
+            }
+        });
+    </script>
+    <script>
+    // ====== Ambil lokasi otomatis ======
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            document.getElementById('latitude').value = position.coords.latitude;
+            document.getElementById('longitude').value = position.coords.longitude;
+            console.log("Lokasi didapat:", position.coords.latitude, position.coords.longitude);
+        },
+        function(error) {
+            console.warn("Gagal ambil lokasi:", error);
+            document.getElementById('latitude').value = '';
+            document.getElementById('longitude').value = '';
+        }
+    );
+    </script>
+
+    <!--JS Tips-->
+    <script>
+        // Saat elemen .tips-box masuk ke layar, tambahkan class .show
+        const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+            observer.unobserve(entry.target); // agar animasi hanya sekali
+            }
+        });
+        }, {
+        threshold: 0.1
+        });
+    
+        document.querySelectorAll('.tips-box').forEach(box => {
+        observer.observe(box);
+        });
+    </script>
+
+
+
+</body>
+</html>

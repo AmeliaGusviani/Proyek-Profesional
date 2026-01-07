@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Klasifikasi Penyakit Tanaman Singkong</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<di>
+    <!--header-->
+    <header>
+        <div class="container header-container">
+        <div class="logo">
+            <img class="logo-icon" src="static/assets/images/logo.png" alt="Logo Daun Singkong" />
+            <span>Sistem Klasifikasi Penyakit Tanaman Singkong</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">HOME</a>
+            <a href="/klasifikasi" class="nav-link {% if request.path == '/klasifikasi' %}active{% endif %}">KLASIFIKASI</a>
+            <a href="/about" class="nav-link {% if request.path == '/about' %}active{% endif %}">ABOUT</a>
+
+            {% if session.get('user_id') %}
+                <a href="/history" class="nav-link {% if request.path == '/history' %}active{% endif %}">RIWAYAT</a>
+                <a href="/logout" class="nav-link">LOGOUT</a>
+            {% else %}
+                <a href="/login" class="nav-link">LOGIN / REGISTER</a>
+            {% endif %}
+
+            <div class="indicator"></div>
+        </nav>
+
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+    <h2>Tentang Sistem</h2>
+    <p class="about-desc">
+        Sistem ini dirancang untuk membantu petani dan peneliti dalam mengklasifikasi penyakit daun singkong secara cepat dan akurat. Proses yang dilakukan melibatkan beberapa tahap penting:
+    </p>
+
+    <div class="about-container">
+        <!--Langkah-->
+        <div class="about-steps">
+            <!--langkah 1-->
+            <div class="step-card">
+            <span class="step-icon"><i class="fas fa-upload" style="color:#01b173;"></i></span>
+
+            <h3>1. Upload Gambar</h3>
+            <p>Pengguna dapat mengunggah gambar atau mengambil gambar secara langsung citra daun singkong.</p>
+            </div>
+
+            <!--langkah 2-->
+            <div class="step-card">
+            <span class="step-icon"><i class="fas fa-cogs" style="color:#01b173;"></i></span>
+
+            <h3>2. Preprocessing</h3>
+            <p>Gambar diubah ukurannya agar siap untuk proses selanjutnya.</p>
+            </div>
+
+            <!--langkah 3-->
+            <div class="step-card">
+            <span class="step-icon"><i class="fas fa-chart-area" style="color:#01b173;"></i></span>
+
+            <h3>3. Pemilihan Metode</h3>
+            <p>Pengguna memilih metode yang digunakan untuk klasifikasi penyakit daun singkong.</p>
+            </div>
+
+            <!--langkah 4-->
+            <div class="step-card">
+            <span class="step-icon"><i class="fas fa-compress-alt" style="color:#01b173;"></i></span>
+
+            <h3>4. Klasifikasi</h3>
+            <p>Sistem melakukan klasifikasi sesuai dengan metode yang telah dipilih.</p>
+            </div>
+
+            <!--langkah 5-->
+            <div class="step-card">
+            <span class="step-icon"><i class="fas fa-robot" style="color:#01b173;"></i></span>
+
+            <h3>5. Hasil Klasifikasi</h3>
+            <p>Hasil klasifikasi ditampilkan lengkap dengan akurasi, presisi, recall, f1-score, dan informasi penyakit.</p>
+            </div>
+
+            <!--langkah 6-->
+            <div class="step-card">
+            <span class="step-icon"><i class="fas fa-file-pdf" style="color:#01b173;"></i></span>
+
+            <h3>6. Simpan PDF</h3>
+            <p>Hasil klasifikasi dapat disimpan dengan format PDF dengan klik icon simpan.</p>
+            </div>
+        </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+    <div class="footer-container">
+
+    <!-- Kiri: Logo + Nama -->
+        <div class="footer-left">
+            <img class="logo-icon" src="static/assets/images/logo.png" alt="Logo Daun Singkong" />
+            <span>Sistem Klasifikasi Penyakit Tanaman Singkong</span>
+        </div>
+        
+        <!-- Kanan: Copyright -->
+        <div class="footer-right">
+        <small>&copy; 2025 Sistem Klasifikasi Penyakit Tanaman Singkong. All rights reserved.</small>
+        </div>
+
+    </div>
+    </footer>
+
+    
+</body>
+</html>

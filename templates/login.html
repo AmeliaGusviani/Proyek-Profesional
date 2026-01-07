@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+    <!-- Header & Navbar -->
+    <header>
+        <div class="container header-container">
+        <div class="logo">
+            <img class="logo-icon" src="static/assets/images/logo.png" alt="Logo Daun Singkong" />
+            <span>Sistem Klasifikasi Penyakit Tanaman Singkong</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">HOME</a>
+            <a href="/klasifikasi" class="nav-link {% if request.path == '/klasifikasi' %}active{% endif %}">KLASIFIKASI</a>
+            <a href="/about" class="nav-link {% if request.path == '/about' %}active{% endif %}">ABOUT</a>
+            {% if session.get('user_id') %}
+                <a href="/history" class="nav-link {% if request.path == '/history' %}active{% endif %}">RIWAYAT</a>
+                <a href="/logout" class="nav-link">LOGOUT</a>
+            {% else %}
+                <a href="/login" class="nav-link active">LOGIN / REGISTER</a>
+            {% endif %}
+            <div class="indicator"></div>
+        </nav>
+        </div>
+    </header>
+
+    <section id="login">
+        <div class="login-container">
+            <div class="login-card">
+                <h2>Login</h2>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flash-messages">
+                            {% for msg in messages %}
+                                <li>{{ msg }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+                <form action="/login" method="POST">
+                    <label for="username">Username:</label>
+                    <input type="text" name="username" placeholder="Masukkan username" required>
+
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" placeholder="Masukkan password" required>
+
+                    <button type="submit" class="btn-login">Login</button>
+                </form>
+                <p class="register-text">Belum punya akun? <a href="/register">Daftar di sini</a></p>
+
+            </div>
+    </section>
+</body>
+</html>

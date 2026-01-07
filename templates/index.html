@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Klasifikasi Penyakit Tanaman Singkong</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <!--header-->
+    <header>
+        <div class="container header-container">
+        <div class="logo">
+            <img class="logo-icon" src="static/assets/images/logo.png" alt="Logo Daun Singkong" />
+            <span>Sistem Klasifikasi Penyakit Tanaman Singkong</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">HOME</a>
+            <a href="/klasifikasi" class="nav-link {% if request.path == '/klasifikasi' %}active{% endif %}">KLASIFIKASI</a>
+            <a href="/about" class="nav-link {% if request.path == '/about' %}active{% endif %}">ABOUT</a>
+
+            {% if session.get('user_id') %}
+                <a href="/history" class="nav-link {% if request.path == '/history' %}active{% endif %}">RIWAYAT</a>
+                <a href="/logout" class="nav-link">LOGOUT</a>
+            {% else %}
+                <a href="/login" class="nav-link">LOGIN / REGISTER</a>
+            {% endif %}
+
+            <div class="indicator"></div>
+        </nav>
+
+
+    </header>
+
+    <!--hero tampilan awal-->
+    <section class="hero">
+        <div class="container hero-container">
+        <div class="hero-text">
+            <h1>Selamat Datang,<br><span>di Sistem Klasifikasi</span><br>Penyakit Tanaman Singkong</h1>
+            <small>KLASIFIKASI CEPAT DAN TEPAT UNTUK TANAMAN SINGKONG ANDA</small>
+            <p>Sistem ini menggunakan metode SVM dan CNN untuk membantu 
+                petani dan peneliti mengklasifikasi penyakit pada tanaman 
+                singkong melalui citra daun. Cukup unggah gambar dan 
+                sistem akan menganalisis serta memberikan informasi lengkap 
+                tentang kondisi tanaman singkong Anda.</p>
+            <button id="btnMulai" class="hero-mulai">Mulai</button>
+        </div>
+
+        <!--Gambar halaman utama-->
+        <div class="hero-image-grid">
+            <div class="disease-card card1"></div>
+            <div class="disease-card card2"></div>
+            <div class="disease-card card3"></div>
+            <div class="disease-card card4"></div>
+        </div>
+        <!--Lingkaran gradasi bergerak-->
+        <div class="animated-circle"></div>
+
+    </section>
+
+    <!--info penyakit dibawah halaman utama-->
+    <section id="penyakit">
+        <div class="container">
+        <h2 class="section-title">Jenis Penyakit Tanaman Singkong</h2>
+        <p class="section-subtitle">Berikut ini beberapa jenis penyakit utama pada tanaman singkong.</p>
+        <div class="card-horizontal-scroll">
+
+            <!-- Card 1 -->
+            <div class="disease-card-horizontal">
+                <img src="{{ url_for('static', filename='assets/images/card-penyakit-cmd.jpg') }}" alt="CMD" style="width:200px; height:200px; border-radius:12px; margin-right:15px;">
+            <div class="card-text">
+                <h3>CMD</h3>
+                <h3>(Cassava Mosaic Disease)</h3>
+                <p>CMD merupakan penyakit virus yang disebabkan oleh serangga kutu putih. 
+                    Gejalanya meliputi pola mosaik karat, belang-belang (motling), dan bercak hijau
+                    bercampur dengan warna putih dan kuning. Daun terinfeksi akan mengalami penyusutan.
+                </p>
+            </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="disease-card-horizontal">
+                <img src="{{ url_for('static', filename='assets/images/card-penyakit-cbb.jpg') }}" alt="CBB" style="width:200px; height:200px; border-radius:12px; margin-right:15px;">
+            <div class="card-text">
+                <h3>CBB</h3>
+                <h3>(Cassava Bacterial Blight)</h3>
+                <p>CBB merupakan penyakit yang disebabkan oleh infeksi bakteri yang dipicu oleh kelembapan. 
+                    Gejalanya meliputi bintik-bintik hitam pada daun dan bercak layu (blight).
+                    Daun yang terinfeksi akan mengering dan rontok sebelum waktunya. </p>
+            </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="disease-card-horizontal">
+                <img src="{{ url_for('static', filename='assets/images/card-penyakit-cgm.jpg') }}" alt="CGM" style="width:200px; height:200px; border-radius:12px; margin-right:15px;">
+            <div class="card-text">
+                <h3>CGM</h3>
+                <h3>(Cassava Green Mite)</h3>
+                <p>CGM merupakan penyakit yang disebabkan oleh tungau Mononychellus tanajoa. 
+                    Gejalanya meliputi daun berbintik, mulai dari bintik kecil secara bertahap
+                    membesar menutupi seluruh permukaan daun. Daun yang terinfeksi akan mengering dan rontok.</p>
+            </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="disease-card-horizontal">
+                <img src="{{ url_for('static', filename='assets/images/card-penyakit-cbsd.jpg') }}" alt="CBSD" style="width:200px; height:200px; border-radius:12px; margin-right:15px;">
+            <div class="card-text">
+                <h3>CBSD</h3>
+                <h3>(Cassava Brown Streak Disease)</h3>
+                <p>CBSD merupakan penyakit disebabkan oleh virus dan menyebar melalui serangga kutu putih. 
+                    Gejalanya meliputi perubahan warna tulang daun menjadi kuning, yang terkadang melebar membentuk bercak
+                    kuning besar. Daun yang terinfeksi akan mengalami kerusakan dan rontok.</p>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Kiri: Logo + Nama -->
+            <div class="footer-left">
+                <img class="logo-icon" src="static/assets/images/logo.png" alt="Logo Daun Singkong" />
+                <span>Sistem Klasifikasi Penyakit Tanaman Singkong</span>
+            </div>
+            <!-- Kanan: Copyright -->
+            <div class="footer-right">
+                <small>&copy; 2025 Sistem Klasifikasi Penyakit Tanaman Singkong. All rights reserved.</small>
+            </div>
+
+        </div>
+    </footer>
+
+    <!--JS Tombol Mulai-->
+    <script>
+        const tombol = document.getElementById('btnMulai');
+        console.log('Tombol ditemukan:', tombol);
+
+        tombol.addEventListener('click', function () {
+        console.log('Tombol diklik');
+        window.location.href = "/klasifikasi"; 
+        });
+    </script>
+
+</body>
+</html>
