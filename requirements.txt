@@ -1,14 +1,23 @@
+# Flask & WSGI
 Flask==2.3.2
-gunicorn==21.2.0
+gunicorn==21.2.0        # opsional, PA tidak pakai gunicorn tapi aman ada
+
+# Numerical & Image Processing
 numpy==1.26.4
 opencv-python-headless==4.10.0.84
 scikit-image==0.25.0
 scikit-learn==1.4.2
-flask_sqlalchemy==3.0.3
-pymysql==1.1.1
-torch==2.2.0+cpu
-torchvision==0.18.0+cpu
-Pillow==10.1.0
+
+# Database
+flask_sqlalchemy==3.1.1
+pymysql==1.1.0
+
+# PyTorch (CPU only)
+torch==2.2.2
+torchvision==0.17.2
+
+# Image & Web Utilities
+Pillow==10.2.0
 requests==2.31.0
-geopy==2.3.0
-pytz==2025.7
+geopy==2.4.1
+pytz==2024.1
