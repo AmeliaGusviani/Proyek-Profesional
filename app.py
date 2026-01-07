@@ -27,11 +27,11 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-db_user = os.environ.get("MYSQL_USER")
-db_password = os.environ.get("MYSQL_PASSWORD")
-db_host = os.environ.get("MYSQL_HOST")
-db_name = os.environ.get("MYSQL_DATABASE")
-db_port = os.environ.get("MYSQL_PORT", "3306")
+db_user = "ameliagusviani"
+db_password = "mysqladmin"  # ganti dengan password MySQL kamu
+db_host = "ameliagusviani.mysql.pythonanywhere-services.com"
+db_name = "ameliagusviani$cassava"
+db_port = "3306"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
