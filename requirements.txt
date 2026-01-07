@@ -1,9 +1,9 @@
+scikit-learn==1.3.2
+numpy==1.26.4
 Flask==2.3.2
 gunicorn==21.2.0
-numpy==1.26.4
 opencv-python==4.10.0.84
 scikit-image==0.25.0
-scikit-learn==1.3.3
 flask_sqlalchemy
 pymysql
 torch==2.2.0
