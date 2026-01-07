@@ -1,15 +1,19 @@
+setuptools>=68.0
+wheel>=1.0
+
 Flask==2.3.2
 gunicorn==21.2.0
 
-numpy==1.25.0              # turun sedikit biar pasti kompatibel
+numpy==1.25.0
 opencv-python-headless==4.10.0.84
 scikit-image==0.25.0
-scikit-learn==1.4.2        # versi stabil terakhir
+scikit-learn==1.4.2
 flask_sqlalchemy==3.1.1
 pymysql==1.1.0
 
-torch==2.2.1                # versi ringan, lebih mudah build
-torchvision==0.17.1         # disesuaikan dengan torch
+torch==2.2.1
+torchvision==0.17.1
+
 Pillow==10.2.0
 requests==2.31.0
 geopy==2.4.1
